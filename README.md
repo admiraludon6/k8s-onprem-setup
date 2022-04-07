@@ -11,7 +11,7 @@ Your machine must have the following installed and in working condition:
 1. `docker`
 2. `kubeadm`
 3. `calico / flunnel`
-6. Server networking (hostnames, DNS, DHCP, IPs and Subnet setup)
+4. Server networking (hostnames, DNS, DHCP, IPs and Subnet setup)
 
 ### Cluster settings
 Below are the settings for each nodes in the cluster.
