@@ -70,7 +70,20 @@ sudo tar zxvf crictl-$VERSION-linux-amd64.tar.gz -C /usr/local/bin
 rm -f crictl-$VERSION-linux-amd64.tar.gz
 ```
 
-5. Initialte kubernetes cluster with kubeadm
+5. Disable firewall, selinux & swap
+```bash
+# disabled firewalld
+systemctl stop firewalld
+systemctl disabled firewalld
+# disabled selinux
+sudo setenforce 0
+sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config
+# disabled swap
+swapoff -a 
+sed -i '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
+```
+
+7. Initialte kubernetes cluster with kubeadm
 
 ```bash
 # setup kubernetes cluster ip range to be different with CNI
@@ -81,7 +94,7 @@ sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 sudo chown $(id -u):$(id -g) $HOME/.kube/config
 ```
 
-6. Install calico CNI
+7. Install calico CNI
 
 ```bash
 kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.25.1/manifests/tigera-operator.yaml
@@ -111,13 +124,13 @@ watch kubectl get pods -n calico-system
 Refer [Easy steps to install Calico CNI on Kubernetes Cluster
 ](https://www.golinuxcloud.com/calico-kubernetes/)
 
-7. Check kubernetes cluster health
+8. Check kubernetes cluster health
 
 ```bash
 kubectl get node
 ```
 
-8. (OPTIONAL) Remove taint for single cluster node
+9. (OPTIONAL) Remove taint for single cluster node
 
 ```bash
 kubectl taint nodes --all node-role.kubernetes.io/control-plane-
