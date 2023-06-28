@@ -74,7 +74,7 @@ rm -f crictl-$VERSION-linux-amd64.tar.gz
 ```bash
 # disabled firewalld
 systemctl stop firewalld
-systemctl disabled firewalld
+systemctl disable firewalld
 # disabled selinux
 sudo setenforce 0
 sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config
