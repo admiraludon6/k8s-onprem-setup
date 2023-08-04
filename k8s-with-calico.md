@@ -84,9 +84,12 @@ swapoff -a
 sed -i '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
 ```
 
-7. Initialte kubernetes cluster with kubeadm
+6. Initialte kubernetes cluster with kubeadm
 
 ```bash
+# set hostname
+echo "127.0.0.1 $(hostname | tr '[:upper:]' '[:lower:]')" >> /etc/hosts
+
 # setup kubernetes cluster ip range to be different with CNI
 sudo kubeadm init --pod-network-cidr=192.168.0.0/24
 
