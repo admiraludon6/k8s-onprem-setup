@@ -37,7 +37,8 @@ sudo dnf install -y containerd
 ```bash
 sudo mkdir -p /etc/containerd
 sudo containerd config default | sudo tee /etc/containerd/config.toml
-sudo sed -i 's/SystemdCgroup = false/SystemdCgroup = true/g' /etc/containerd/config.toml
+# commented out due to bug
+# sudo sed -i 's/SystemdCgroup = false/SystemdCgroup = true/g' /etc/containerd/config.toml
 sudo systemctl enable containerd
 sudo systemctl restart containerd
 ```
@@ -88,6 +89,8 @@ sed -i '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
 ```bash
 # setup kubernetes cluster ip range to be different with CNI
 sudo kubeadm init --pod-network-cidr=192.168.0.0/24
+
+systemctl start kubelet
 
 mkdir -p $HOME/.kube
 sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
