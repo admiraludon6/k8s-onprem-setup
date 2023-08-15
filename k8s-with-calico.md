@@ -29,7 +29,7 @@ sudo sysctl --system
 2. install containerd
 
 ```bash
-yum install yum-utils
+yum install yum-utils -y
 sudo dnf config-manager --add-repo=https://download.docker.com/linux/centos/docker-ce.repo
 sudo dnf install -y containerd
 ```
@@ -89,18 +89,27 @@ sed -i '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
 ```bash
 # set hostname
 echo "127.0.0.1 $(hostname | tr '[:upper:]' '[:lower:]')" >> /etc/hosts
+```
 
+```bash
 # setup kubernetes cluster ip range to be different with CNI
 sudo kubeadm init --pod-network-cidr=192.168.0.0/24
+```
 
-systemctl start kubelet
-
+```bash
 mkdir -p $HOME/.kube
 sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 sudo chown $(id -u):$(id -g) $HOME/.kube/config
 ```
 
-7. Install calico CNI
+7. (OPTIONAL) Remove taint for single cluster node
+
+```bash
+kubectl taint nodes --all node-role.kubernetes.io/control-plane-
+kubectl taint nodes --all node-role.kubernetes.io/master-
+```
+
+8. Install calico CNI
 
 ```bash
 kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.25.1/manifests/tigera-operator.yaml
@@ -130,15 +139,8 @@ watch kubectl get pods -n calico-system
 Refer [Easy steps to install Calico CNI on Kubernetes Cluster
 ](https://www.golinuxcloud.com/calico-kubernetes/)
 
-8. Check kubernetes cluster health
+9. Check kubernetes cluster health
 
 ```bash
 kubectl get node
-```
-
-9. (OPTIONAL) Remove taint for single cluster node
-
-```bash
-kubectl taint nodes --all node-role.kubernetes.io/control-plane-
-kubectl taint nodes --all node-role.kubernetes.io/master-
 ```
